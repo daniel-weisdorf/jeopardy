@@ -28,3 +28,4 @@ class GameSerializer(serializers.ModelSerializer):
     teams = TeamSerializer(source='team_set')
     class Meta:
         model = Game
+        fields = '__all__'

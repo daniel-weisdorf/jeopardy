@@ -1,1 +1,2 @@
 *.pyc
+jeopardy_backend/db.sqlite3

@@ -39,7 +39,10 @@ class Question(models.Model):
     answer = models.CharField(max_length=200, null=True, blank=True)
     value = models.IntegerField()
     is_answered = models.BooleanField(default=False)
+    is_selected = models.BooleanField(default=False)
+    is_buzzed_on = models.BooleanField(default=False)
     is_daily_double = models.BooleanField(default=False)
+    is_picture_question = models.BooleanField(default=False)
 
     def __str__(self):
         return self.question

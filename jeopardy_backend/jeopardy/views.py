@@ -7,9 +7,6 @@ from jeopardy.models import Game, Host, Category, Question, Player, Team
 import string, json
 from django.utils.crypto import get_random_string
 
-def index(request):
-    return HttpResponse("Hello, world. You're at the jeopardy index.")
-
 class GameViewset(viewsets.ModelViewSet):
     serializer_class = GameSerializer
     queryset = Game.objects.all()

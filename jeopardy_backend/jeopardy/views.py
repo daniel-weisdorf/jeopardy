@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, HttpResponseBadRequest
-from rest_framework import viewsets
-from jeopardy.serializers import GameSerializer, TeamSerializer, PlayerSerializer
+from rest_framework import viewsets, status
+from rest_framework.response import Response
+from jeopardy.serializers import GameSerializer, TeamSerializer, PlayerSerializer, QuestionSerializer, CategorySerializer
 from jeopardy.models import Game, Host, Category, Question, Player, Team
 
 import string, json
@@ -35,8 +35,9 @@ class GameViewset(viewsets.ModelViewSet):
                 answer = question_json['answer'] if 'answer' in question_json else None
                 question = Question.objects.create(category=category, question=question_json['question'], value = question_no * 200, answer=answer)
                 question_no += 1
-        
-        return HttpResponse(GameSerializer(game).data)
+
+        game.refresh_from_db()
+        return Response(GameSerializer(game).data, status=status.HTTP_201_CREATED)
 
 class TeamViewset(viewsets.ModelViewSet):
     serializer_class = TeamSerializer
@@ -48,12 +49,13 @@ class TeamViewset(viewsets.ModelViewSet):
         team_json = request.data
         game = get_object_or_404(Game, room_code=team_json['room_code'])
         if game.is_complete:
-            raise HttpResponseBadRequest('Game is already done')
+            return Response('Game is already done', status=status.HTTP_400_BAD_REQUEST)
 
         team = Team.objects.create(game=game, name=team_json['name'])
         player = Player.objects.create(team=team, name=team_json['captain_name'], is_captain=True)
 
-        return HttpResponse(TeamSerializer(team).data)
+        team.refresh_from_db()
+        return Response(TeamSerializer(team).data, status=status.HTTP_201_CREATED)
 
 class PlayerViewset(viewsets.ModelViewSet):
     serializer_class = PlayerSerializer
@@ -66,8 +68,8 @@ class PlayerViewset(viewsets.ModelViewSet):
         team = get_object_or_404(Team, id=player_json['team_id'])
 
         if team.game.is_complete:
-            raise HttpResponseBadRequest('Game is already done')
+            return Response('Game is already done', status=status.HTTP_400_BAD_REQUEST)
 
         player = Player.objects.create(team=team, name=team_json['player_name'])
 
-        return HttpResponse(PlayerSerializer(player).data)
+        return Response(PlayerSerializer(player).data, status=status.HTTP_201_CREATED)

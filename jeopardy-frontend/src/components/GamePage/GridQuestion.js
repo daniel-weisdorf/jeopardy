@@ -20,7 +20,7 @@ export default class GridQuestion extends React.Component {
                 }}
                 disabled={this.props.isAnswered || !this.props.canClick}
             >
-                {this.props.isAnswered ? "" : this.props.value}
+                {this.props.isAnswered ? "" : "$" + this.props.value}
             </Button>
         );
     }

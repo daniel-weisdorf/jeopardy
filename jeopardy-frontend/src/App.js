@@ -2,6 +2,8 @@ import "./App.css";
 import React from "react";
 import { Pages } from "./globals/Enums";
 import LandingPage from "./pages/LandingPage";
+import { withToastManager } from "react-toast-notifications";
+import CreatePage from "./pages/CreatePage";
 
 class App extends React.Component {
     constructor(props) {
@@ -30,9 +32,12 @@ class App extends React.Component {
                 {this.state.currentPage === Pages.LANDING && (
                     <LandingPage goToPage={this.setPage} />
                 )}
+                {this.state.currentPage === Pages.CREATE && (
+                    <CreatePage goToPage={this.setPage} />
+                )}
             </div>
         );
     }
 }
 
-export default App;
+export default withToastManager(App);

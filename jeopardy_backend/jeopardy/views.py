@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseBadRequest
 from rest_framework import viewsets
-from jeopardy.serializers import GameSerializer, TeamSerializer
+from jeopardy.serializers import GameSerializer, TeamSerializer, PlayerSerializer
 from jeopardy.models import Game, Host, Category, Question, Player, Team
 
 import string, json
@@ -42,7 +42,7 @@ class TeamViewset(viewsets.ModelViewSet):
     serializer_class = TeamSerializer
     queryset = Team.objects.all()
 
-    http_method_names = ['GET', 'POST']
+    http_method_names = ['POST']
 
     def create(self, request):
         team_json = request.data
@@ -54,3 +54,20 @@ class TeamViewset(viewsets.ModelViewSet):
         player = Player.objects.create(team=team, name=team_json['captain_name'], is_captain=True)
 
         return HttpResponse(TeamSerializer(team))
+
+class PlayerViewset(viewsets.ModelViewSet):
+    serializer_class = PlayerSerializer
+    queryset = Player.objects.all()
+
+    http_method_names = ['POST']
+
+    def create(self, request):
+        player_json = request.data
+        team = get_object_or_404(Team, id=player_json['team_id'])
+
+        if team.game.is_complete:
+            raise HttpResponseBadRequest('Game is already done')
+
+        player = Player.objects.create(team=team, name=team_json['player_name'])
+
+        return HttpResponse(PlayerSerializer(player))

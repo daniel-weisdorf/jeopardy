@@ -1,6 +1,11 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
 import GridQuestion from "./GridQuestion";
+import {
+    GridSize,
+    GridBorder,
+    GridBackgroundColor,
+} from "../../globals/StyleConstants";
 
 // For usage in Grid, not Zoomed in
 export default class GridCategory extends React.Component {
@@ -15,10 +20,10 @@ export default class GridCategory extends React.Component {
                 <Button
                     disabled={true}
                     style={{
-                        border: "5px solid black",
-                        height: 100,
-                        width: 100,
-                        backgroundColor: "blue",
+                        border: GridBorder,
+                        height: GridSize,
+                        width: GridSize,
+                        backgroundColor: GridBackgroundColor,
                     }}
                 >
                     {this.props.categoryName}

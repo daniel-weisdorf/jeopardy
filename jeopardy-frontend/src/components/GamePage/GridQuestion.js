@@ -1,5 +1,10 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
+import {
+    GridSize,
+    GridBorder,
+    GridBackgroundColor,
+} from "../../globals/StyleConstants";
 
 // For usage in Grid, not Zoomed in
 export default class GridQuestion extends React.Component {
@@ -7,12 +12,11 @@ export default class GridQuestion extends React.Component {
         return (
             <Button
                 style={{
-                    width: 100,
-                    height: 100,
-                    backgroundColor: "blue",
-                    borderLeft: "1px solid black",
-                    borderRight: "1px solid black",
-                    borderBottom: "1px solid black",
+                    border: GridBorder,
+                    height: GridSize,
+                    width: GridSize,
+                    backgroundColor: GridBackgroundColor,
+                    borderTopWidth: 0,
                 }}
                 disabled={this.props.isAnswered || !this.props.canClick}
             >

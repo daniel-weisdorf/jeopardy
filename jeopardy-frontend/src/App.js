@@ -14,11 +14,19 @@ class App extends React.Component {
         this.state = {
             currentPage: Pages.LANDING,
             gameState: Immutable.Map(),
+            isHost: false,
+            isCaptain: false,
         };
         this.setPage = this.setPage.bind(this);
         this.setGameState = this.setGameState.bind(this);
+        this.setHost = this.setHost.bind(this);
     }
 
+    setHost(bool) {
+        this.setState({
+            host: bool,
+        });
+    }
     setPage(page) {
         this.setState({ currentPage: page });
     }
@@ -47,6 +55,7 @@ class App extends React.Component {
                     <CreatePage
                         setPage={this.setPage}
                         setGameState={this.setGameState}
+                        setHost={this.setHost}
                     />
                 )}
                 {this.state.currentPage === Pages.JOIN && (
@@ -61,6 +70,8 @@ class App extends React.Component {
                         setPage={this.setPage}
                         setGameState={this.setGameState}
                         gameState={this.state.gameState}
+                        isHost={this.state.isHost}
+                        isCaptain={this.state.isCaptain}
                     />
                 )}
             </div>

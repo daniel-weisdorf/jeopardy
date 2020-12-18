@@ -68,6 +68,7 @@ class CreatePage extends React.Component {
         try {
             const response = await axios.post("/api/games/", data);
             this.props.setGameState(response.data);
+            this.props.setHost(true);
             this.props.setPage(Pages.GAME);
         } catch (error) {
             const res = error.response;

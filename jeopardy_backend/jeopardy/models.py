@@ -26,6 +26,10 @@ class Player(models.Model):
     def __str__(self):
         return self.name
 
+class Host(models.Model):
+    game = models.OneToOneField(Game, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
+
 class Category(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)

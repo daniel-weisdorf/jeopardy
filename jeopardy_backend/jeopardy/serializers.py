@@ -15,7 +15,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 class QuestionDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
-        exclude = ['category']
+        exclude = ['category', 'answer']
 
 class HostSerializer(serializers.ModelSerializer):
     class Meta:

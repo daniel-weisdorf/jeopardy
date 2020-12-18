@@ -1,2 +1,3 @@
 *.pyc
 jeopardy_backend/db.sqlite3
+jeopardy-frontend/.eslintcache

@@ -5,6 +5,7 @@ import LandingPage from "./pages/LandingPage";
 import { withToastManager } from "react-toast-notifications";
 import CreatePage from "./pages/CreatePage";
 import JoinPage from "./pages/JoinPage";
+import GamePage from "./pages/GamePage";
 import Immutable from "immutable";
 
 class App extends React.Component {
@@ -50,6 +51,13 @@ class App extends React.Component {
                 )}
                 {this.state.currentPage === Pages.JOIN && (
                     <JoinPage
+                        setPage={this.setPage}
+                        setGameState={this.setGameState}
+                        gameState={this.state.gameState}
+                    />
+                )}
+                {this.state.currentPage === Pages.GAME && (
+                    <GamePage
                         setPage={this.setPage}
                         setGameState={this.setGameState}
                         gameState={this.state.gameState}

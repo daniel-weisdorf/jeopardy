@@ -12,7 +12,7 @@ export default class LandingPage extends React.Component {
                 </h1>
                 <div style={{ margin: "auto", textAlign: "center" }}>
                     <Button
-                        onClick={() => this.props.goToPage(Pages.CREATE)}
+                        onClick={() => this.props.setPage(Pages.CREATE)}
                         style={{
                             margin: 10,
                             width: 150,
@@ -21,7 +21,7 @@ export default class LandingPage extends React.Component {
                         <div>Create a game</div>
                     </Button>
                     <Button
-                        onClick={() => this.props.goToPage(Pages.JOIN)}
+                        onClick={() => this.props.setPage(Pages.JOIN)}
                         style={{
                             margin: 10,
                             width: 150,

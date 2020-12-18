@@ -4,6 +4,10 @@ import { GameName } from "../globals/TextConstants";
 import { Pages } from "../globals/Enums";
 
 export default class LandingPage extends React.Component {
+    componentDidMount() {
+        this.props.setCaptain(false);
+        this.props.setHost(false);
+    }
     render() {
         return (
             <div>

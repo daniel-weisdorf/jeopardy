@@ -20,12 +20,14 @@ class App extends React.Component {
         this.setPage = this.setPage.bind(this);
         this.setGameState = this.setGameState.bind(this);
         this.setHost = this.setHost.bind(this);
+        this.setCaptain = this.setCaptain.bind(this);
     }
 
     setHost(bool) {
-        this.setState({
-            host: bool,
-        });
+        this.setState({ isHost: bool });
+    }
+    setCaptain(bool) {
+        this.setState({ isCaptain: bool });
     }
     setPage(page) {
         this.setState({ currentPage: page });
@@ -49,7 +51,11 @@ class App extends React.Component {
                 }}
             >
                 {this.state.currentPage === Pages.LANDING && (
-                    <LandingPage setPage={this.setPage} />
+                    <LandingPage
+                        setPage={this.setPage}
+                        setCaptain={this.setCaptain}
+                        setHost={this.setHost}
+                    />
                 )}
                 {this.state.currentPage === Pages.CREATE && (
                     <CreatePage

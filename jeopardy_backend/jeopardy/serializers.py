@@ -23,7 +23,7 @@ class HostSerializer(serializers.ModelSerializer):
         exclude = ['game']
 
 class CategorySerializer(serializers.ModelSerializer):
-    questions = QuestionSerializer(source='question_set')
+    questions = QuestionSerializer(many=True)
     class Meta:
         model = Category
         exclude = ['game']
@@ -34,15 +34,15 @@ class PlayerSerializer(serializers.ModelSerializer):
         exclude = ['team']
 
 class TeamSerializer(serializers.ModelSerializer):
-    players = PlayerSerializer(source='player_set')
+    players = PlayerSerializer()
     class Meta:
         model = Team
         exclude = ['game']
 
 class GameSerializer(serializers.ModelSerializer):
-    categories = CategorySerializer(source='category_set')
-    teams = TeamSerializer(source='team_set')
-    host = HostSerializer(source='host')
+    categories = CategorySerializer(many=True)
+    teams = TeamSerializer(many=True)
+    host = HostSerializer()
     class Meta:
         model = Game
         fields = '__all__'

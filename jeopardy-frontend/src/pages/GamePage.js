@@ -29,6 +29,7 @@ export default class GamePage extends React.Component {
                             key={o.id}
                             questions={o.questions}
                             categoryName={o.name}
+                            canClick={this.props.isCaptain}
                         />
                     ))}
             </div>

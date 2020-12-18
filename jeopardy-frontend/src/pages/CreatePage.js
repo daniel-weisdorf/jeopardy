@@ -3,6 +3,7 @@ import { withToastManager } from "react-toast-notifications";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
+import axios from "axios";
 
 class CreatePage extends React.Component {
     constructor(props) {
@@ -10,10 +11,10 @@ class CreatePage extends React.Component {
         this.state = {
             name: "",
             json: "",
-            canCreate: false,
             isBusy: false,
         };
         this.handleNameChange = this.handleNameChange.bind(this);
+        this.handleFileChange = this.handleFileChange.bind(this);
     }
 
     // Form State Handlers
@@ -23,36 +24,72 @@ class CreatePage extends React.Component {
         });
     }
 
+    handleFileChange(fileEvent) {
+        if (!fileEvent.target.files[0]) {
+            this.setState({
+                json: "",
+            });
+            return;
+        }
+        this.setState({ isBusy: true });
+        const reader = new FileReader();
+        reader.addEventListener("load", (readEvent) => {
+            try {
+                this.setState({
+                    json: JSON.parse(readEvent.target.result),
+                    isBusy: false,
+                });
+            } catch (error) {
+                this.setState({
+                    json: "",
+                    isBusy: false,
+                });
+                this.props.toastManager.add(
+                    "This file does not appear to be a JSON format, and I'm not even checking for the expected JSON format. Come on.",
+                    {
+                        appearance: "error",
+                    }
+                );
+            }
+        });
+        reader.readAsText(fileEvent.target.files[0]);
+    }
+
     // Action Handlers
     async createGame(retries = 0) {
         this.setState({
             isBusy: true,
         });
-        const response = await fetch("/api/games/", {
-            method: "POST",
-            body: JSON.stringify(""),
-        });
-
-        if (response.ok) {
-            const json = await response.json();
-        } else if (retries < 3) {
-            setTimeout(() => {
-                this.createGame(++retries);
-            }, 1000);
-        } else {
-            this.props.toastManager.add(
-                "Hmm, something went wrong. Try again in a little bit!",
-                {
-                    appearance: "error",
-                }
-            );
-            this.setState({
-                isBusy: false,
-            });
+        const data = {
+            host_name: this.state.name,
+            categories: this.state.json["categories"],
+        };
+        try {
+            const response = await axios.post("/api/games/", data);
+            const responseJson = await response.json();
+            console.log(responseJson);
+            // Nav to Gamepage
+        } catch (error) {
+            if (retries < 3) {
+                setTimeout(() => {
+                    this.createGame(++retries);
+                }, 1000);
+            } else {
+                this.props.toastManager.add(
+                    "Hmm, something went wrong. Try again in a little bit!",
+                    {
+                        appearance: "error",
+                    }
+                );
+                this.setState({
+                    isBusy: false,
+                });
+            }
         }
     }
 
     render() {
+        const canCreate = this.state.name.length > 0 && this.state.json;
         return (
             <Form
                 style={{
@@ -75,15 +112,21 @@ class CreatePage extends React.Component {
                     <Form.File
                         id="JSONUpload"
                         label="Upload your JSON File of Questions:"
+                        onChange={this.handleFileChange}
+                        accept=".txt, .json"
                     />
                 </Form.Group>
                 <div style={{ textAlign: "center" }}>
                     <Button
-                        variant={this.state.canCreate ? "primary" : "secondary"}
-                        disabled={this.state.isBusy || !this.state.canCreate}
+                        variant={canCreate ? "primary" : "secondary"}
+                        disabled={this.state.isBusy || !canCreate}
                         onClick={() => this.createGame()}
                     >
-                        Create Game
+                        {this.state.isBusy ? (
+                            <Spinner animation="border" />
+                        ) : (
+                            "Create Game"
+                        )}
                     </Button>
                 </div>
             </Form>

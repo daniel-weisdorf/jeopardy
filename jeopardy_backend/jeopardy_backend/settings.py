@@ -71,6 +71,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'jeopardy_backend.wsgi.application'
+ASGI_APPLICATION = 'jeopardy_backend.asgi.application'
 
 
 # Database

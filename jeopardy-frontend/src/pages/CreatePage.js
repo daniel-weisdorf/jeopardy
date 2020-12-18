@@ -70,6 +70,7 @@ class CreatePage extends React.Component {
             this.props.setGameState(response.data);
             this.props.setHost(true);
             this.props.setPage(Pages.GAME);
+            // Attach to socket here
         } catch (error) {
             const res = error.response;
             if (res.status === 500 && retries < 3) {

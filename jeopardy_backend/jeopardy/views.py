@@ -14,7 +14,7 @@ class GameViewset(viewsets.ModelViewSet):
     serializer_class = GameSerializer
     queryset = Game.objects.all()
     
-    http_method_names = ['GET', 'POST']
+    http_method_names = ['get', 'post']
 
     def create(self, request):
         game_json = request.data
@@ -36,13 +36,13 @@ class GameViewset(viewsets.ModelViewSet):
                 question = Question.objects.create(category=category, question=question_json['question'], value = question_no * 200, answer=answer)
                 question_no += 1
         
-        return HttpResponse(GameSerializer(game))
+        return HttpResponse(GameSerializer(game).data)
 
 class TeamViewset(viewsets.ModelViewSet):
     serializer_class = TeamSerializer
     queryset = Team.objects.all()
 
-    http_method_names = ['POST']
+    http_method_names = ['post']
 
     def create(self, request):
         team_json = request.data
@@ -53,13 +53,13 @@ class TeamViewset(viewsets.ModelViewSet):
         team = Team.objects.create(game=game, name=team_json['name'])
         player = Player.objects.create(team=team, name=team_json['captain_name'], is_captain=True)
 
-        return HttpResponse(TeamSerializer(team))
+        return HttpResponse(TeamSerializer(team).data)
 
 class PlayerViewset(viewsets.ModelViewSet):
     serializer_class = PlayerSerializer
     queryset = Player.objects.all()
 
-    http_method_names = ['POST']
+    http_method_names = ['post']
 
     def create(self, request):
         player_json = request.data
@@ -70,4 +70,4 @@ class PlayerViewset(viewsets.ModelViewSet):
 
         player = Player.objects.create(team=team, name=team_json['player_name'])
 
-        return HttpResponse(PlayerSerializer(player))
+        return HttpResponse(PlayerSerializer(player).data)

@@ -4,18 +4,26 @@ import { Pages } from "./globals/Enums";
 import LandingPage from "./pages/LandingPage";
 import { withToastManager } from "react-toast-notifications";
 import CreatePage from "./pages/CreatePage";
+import Immutable from "immutable";
 
 class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             currentPage: Pages.LANDING,
+            gameState: Immutable.Map(),
         };
         this.setPage = this.setPage.bind(this);
+        this.setGameState = this.setGameState.bind(this);
     }
 
     setPage(page) {
         this.setState({ currentPage: page });
+    }
+    setGameState(data) {
+        this.setState({
+            gameState: Immutable.fromJS(data),
+        });
     }
 
     render() {
@@ -30,10 +38,13 @@ class App extends React.Component {
                 }}
             >
                 {this.state.currentPage === Pages.LANDING && (
-                    <LandingPage goToPage={this.setPage} />
+                    <LandingPage setPage={this.setPage} />
                 )}
                 {this.state.currentPage === Pages.CREATE && (
-                    <CreatePage goToPage={this.setPage} />
+                    <CreatePage
+                        setPage={this.setPage}
+                        setGameState={this.setGameState}
+                    />
                 )}
             </div>
         );

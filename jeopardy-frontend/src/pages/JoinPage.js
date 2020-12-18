@@ -5,29 +5,37 @@ import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import axios from "axios";
 import { Pages } from "../globals/Enums";
+import Immutable from "immutable";
+import JoinTeam from "../components/JoinPage/JoinTeam";
 
 class JoinPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: "",
-            team: "",
+            playerName: "",
+            teamName: "",
             roomCode: "",
             isBusy: false,
         };
-        this.handleNameChange = this.handleNameChange.bind(this);
+        this.handlePlayerNameChange = this.handlePlayerNameChange.bind(this);
         this.handleRoomCodeChange = this.handleRoomCodeChange.bind(this);
+        this.handleTeamNameChange = this.handleTeamNameChange.bind(this);
     }
 
     // Form State Handlers
-    handleNameChange(event) {
+    handlePlayerNameChange(event) {
         this.setState({
-            name: event.target.value,
+            playerName: event.target.value,
         });
     }
     handleRoomCodeChange(event) {
         this.setState({
             roomCode: event.target.value,
+        });
+    }
+    handleTeamNameChange(event) {
+        this.setState({
+            teamName: event.target.value,
         });
     }
 
@@ -40,8 +48,12 @@ class JoinPage extends React.Component {
             const response = await axios.get(
                 `/api/games/?roomCode=${this.state.roomCode.toUpperCase()}`
             );
+            console.log(response);
+            console.log(this.props.setGameState);
             this.props.setGameState(response.data);
+            // Attach to socket here
         } catch (error) {
+            console.log(error);
             const res = error.response;
             if (res.status === 404) {
                 this.props.toastManager.add("Room Code not found", {
@@ -72,9 +84,7 @@ class JoinPage extends React.Component {
         const canGetGameInfo = this.state.roomCode.length === 10;
         return (
             <>
-                {this.props.gameState.get("teams", false) ? (
-                    <div>teamselect/join</div>
-                ) : (
+                {!this.props.gameState.get("teams", false) ? (
                     <Form
                         style={{
                             border: "1px solid gray",
@@ -117,6 +127,41 @@ class JoinPage extends React.Component {
                                 Join Game
                             </Button>
                         </div>
+                    </Form>
+                ) : (
+                    <Form
+                        style={{
+                            border: "1px solid gray",
+                            borderRadius: 10,
+                            padding: 20,
+                            width: "30%",
+                        }}
+                    >
+                        <Form.Group controlId="playerName">
+                            <Form.Label>Player Name</Form.Label>
+                            <Form.Control
+                                autoComplete="off"
+                                type="text"
+                                value={this.state.playerName}
+                                onChange={this.handlePlayerNameChange}
+                            />
+                        </Form.Group>
+                        {this.props.gameState
+                            .get("teams")
+                            .toJS()
+                            .map((o) => (
+                                <JoinTeam
+                                    key={o.id}
+                                    name={o.name}
+                                    players={Immutable.fromJS(o.players)}
+                                />
+                            ))}
+                        <JoinTeam
+                            name={this.state.teamName}
+                            handleTeamNameChange={this.handleTeamNameChange}
+                            create={true}
+                            createTeam={this.createTeam}
+                        />
                     </Form>
                 )}
             </>

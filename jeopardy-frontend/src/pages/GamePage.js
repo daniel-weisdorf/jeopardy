@@ -4,6 +4,7 @@ import Button from "react-bootstrap/Button";
 import axios from "axios";
 import { Pages } from "../globals/Enums";
 import GridCategory from "../components/GamePage/GridCategory";
+import Immutable from "immutable";
 
 export default class GamePage extends React.Component {
     constructor(props) {
@@ -16,6 +17,7 @@ export default class GamePage extends React.Component {
         // Map Teams -> Players
         return (
             <div
+                id="grid"
                 style={{
                     display: "flex",
                     flexDirection: "row",
@@ -27,7 +29,7 @@ export default class GamePage extends React.Component {
                     .map((o) => (
                         <GridCategory
                             key={o.id}
-                            questions={o.questions}
+                            questions={Immutable.fromJS(o.questions)}
                             categoryName={o.name}
                             canClick={this.props.isCaptain}
                         />

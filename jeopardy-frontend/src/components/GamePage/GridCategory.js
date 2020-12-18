@@ -10,6 +10,7 @@ import {
 // For usage in Grid, not Zoomed in
 export default class GridCategory extends React.Component {
     render() {
+        const questions = this.props.questions.toJS();
         return (
             <div
                 style={{
@@ -28,7 +29,7 @@ export default class GridCategory extends React.Component {
                 >
                     {this.props.categoryName}
                 </Button>
-                {this.props.questions.map((o) => (
+                {questions.map((o) => (
                     <GridQuestion
                         key={o.id}
                         isAnswered={o.isAnswered}

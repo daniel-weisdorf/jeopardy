@@ -1,5 +1,4 @@
 import React from "react";
-import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
 import { GameName } from "../globals/TextConstants";
 import { Pages } from "../globals/Enums";
@@ -7,7 +6,7 @@ import { Pages } from "../globals/Enums";
 export default class LandingPage extends React.Component {
     render() {
         return (
-            <Container>
+            <div>
                 <h1 style={{ textAlign: "center" }}>
                     Epic {GameName} Website Woooooo
                 </h1>
@@ -31,7 +30,7 @@ export default class LandingPage extends React.Component {
                         <div>Join a game</div>
                     </Button>
                 </div>
-            </Container>
+            </div>
         );
     }
 }

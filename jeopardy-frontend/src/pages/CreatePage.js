@@ -70,7 +70,8 @@ class CreatePage extends React.Component {
             this.props.setGameState(response.data);
             this.props.setPage(Pages.GAME);
         } catch (error) {
-            if (retries < 3) {
+            const res = error.response;
+            if (res.status === 500 && retries < 3) {
                 setTimeout(() => {
                     this.createGame(++retries);
                 }, 1000);
@@ -96,6 +97,7 @@ class CreatePage extends React.Component {
                     border: "1px solid gray",
                     borderRadius: 10,
                     padding: 20,
+                    width: "30%",
                 }}
             >
                 <Form.Group controlId="name">

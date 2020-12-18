@@ -38,6 +38,12 @@ class GameViewset(viewsets.ModelViewSet):
 
         game.refresh_from_db()
         return Response(GameSerializer(game).data, status=status.HTTP_201_CREATED)
+    
+    def list(self, request):
+        # not actually a list, sue me
+        room_code = request.query_params.get('roomCode')
+        game = get_object_or_404(Game, room_code=room_code)
+        return Response(GameSerializer(game).data)
 
 class TeamViewset(viewsets.ModelViewSet):
     serializer_class = TeamSerializer

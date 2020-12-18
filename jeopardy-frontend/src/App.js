@@ -4,6 +4,7 @@ import { Pages } from "./globals/Enums";
 import LandingPage from "./pages/LandingPage";
 import { withToastManager } from "react-toast-notifications";
 import CreatePage from "./pages/CreatePage";
+import JoinPage from "./pages/JoinPage";
 import Immutable from "immutable";
 
 class App extends React.Component {
@@ -31,6 +32,7 @@ class App extends React.Component {
             <div
                 style={{
                     height: "100vh",
+                    width: "100vw",
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
@@ -44,6 +46,13 @@ class App extends React.Component {
                     <CreatePage
                         setPage={this.setPage}
                         setGameState={this.setGameState}
+                    />
+                )}
+                {this.state.currentPage === Pages.JOIN && (
+                    <JoinPage
+                        setPage={this.setPage}
+                        setGameState={this.setGameState}
+                        gameState={this.state.gameState}
                     />
                 )}
             </div>

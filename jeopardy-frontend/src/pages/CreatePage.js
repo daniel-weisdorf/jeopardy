@@ -4,6 +4,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import axios from "axios";
+import { Pages } from "../globals/Enums";
 
 class CreatePage extends React.Component {
     constructor(props) {
@@ -66,9 +67,8 @@ class CreatePage extends React.Component {
         };
         try {
             const response = await axios.post("/api/games/", data);
-            const responseJson = await response.json();
-            console.log(responseJson);
-            // Nav to Gamepage
+            this.props.setGameState(response.data);
+            this.props.setPage(Pages.GAME);
         } catch (error) {
             if (retries < 3) {
                 setTimeout(() => {
@@ -118,9 +118,18 @@ class CreatePage extends React.Component {
                 </Form.Group>
                 <div style={{ textAlign: "center" }}>
                     <Button
+                        variant="danger"
+                        disabled={this.state.isBusy}
+                        onClick={() => this.props.setPage(Pages.LANDING)}
+                        style={{ marginRight: 20, width: 110 }}
+                    >
+                        Back
+                    </Button>
+                    <Button
                         variant={canCreate ? "primary" : "secondary"}
                         disabled={this.state.isBusy || !canCreate}
                         onClick={() => this.createGame()}
+                        style={{ width: 125 }}
                     >
                         {this.state.isBusy ? (
                             <Spinner animation="border" />

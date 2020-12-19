@@ -1,6 +1,7 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import Spinner from "react-bootstrap/Spinner";
 
 export default class JoinTeam extends React.Component {
     render() {
@@ -11,6 +12,8 @@ export default class JoinTeam extends React.Component {
                     flexDirection: "row",
                     height: 40,
                     justifyContent: "space-between",
+                    marginTop: 20,
+                    marginBottom: 20,
                 }}
             >
                 {this.props.create ? (
@@ -27,8 +30,21 @@ export default class JoinTeam extends React.Component {
                     this.props.name
                 )}
 
-                <Button style={{ height: "100%" }}>
-                    {this.props.create ? "Create Team" : "Join Team"}
+                <Button
+                    disabled={
+                        !this.props.canClick ||
+                        (this.props.create && !this.props.name)
+                    }
+                    style={{ height: "100%" }}
+                    onClick={this.props.onClick}
+                >
+                    {this.props.isBusy ? (
+                        <Spinner animation="border" />
+                    ) : this.props.create ? (
+                        "Create Team"
+                    ) : (
+                        "Join Team"
+                    )}
                 </Button>
             </div>
         );

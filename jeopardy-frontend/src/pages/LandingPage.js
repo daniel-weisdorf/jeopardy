@@ -12,7 +12,7 @@ export default class LandingPage extends React.Component {
         return (
             <div>
                 <h1 style={{ textAlign: "center" }}>
-                    Epic {GameName} Website Woooooo
+                    Christmas Party {GameName} Wooooooo
                 </h1>
                 <div style={{ margin: "auto", textAlign: "center" }}>
                     <Button

@@ -6,4 +6,10 @@ Code standards will not be strictly adhered to. Things will be run in dev-mode b
 
 Time results in better code, I promise.
 
+
+## Notes for getting it to run
+Redis backend for sockets:
 `docker run -p 6379:6379 -d redis:5`
+
+Installed pip packages (hopefully didn't miss any)
+`asgi-redis`, `asgiref`, `channels`, `channels-redis`, `Django`, `redis`

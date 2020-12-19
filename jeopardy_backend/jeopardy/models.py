@@ -6,6 +6,13 @@ class Game(models.Model):
 	room_code = models.CharField(max_length=10, unique=True)
 	is_complete = models.BooleanField(default=False)
 
+	def is_player_answering(self):
+		teams = self.teams.all()
+		for team in teams:
+			if len(team.players.all().filter(is_answering=True)):
+				return True
+		return False
+
 	def __str__(self):
 		return self.room_code
 

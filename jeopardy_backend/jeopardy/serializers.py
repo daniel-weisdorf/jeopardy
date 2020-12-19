@@ -43,6 +43,8 @@ class GameSerializer(serializers.ModelSerializer):
     categories = CategorySerializer(many=True)
     teams = TeamSerializer(many=True)
     host = HostSerializer()
+    is_player_answering = serializers.BooleanField()
+
     class Meta:
         model = Game
         fields = '__all__'

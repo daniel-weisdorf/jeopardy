@@ -73,6 +73,14 @@ TEMPLATES = [
 WSGI_APPLICATION = 'jeopardy_backend.wsgi.application'
 ASGI_APPLICATION = 'jeopardy_backend.asgi.application'
 
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases

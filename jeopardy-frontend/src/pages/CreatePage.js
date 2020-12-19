@@ -88,10 +88,10 @@ class CreatePage extends React.Component {
             return;
         }
         this.props.setGameState(response.data);
+        this.props.connectSocket();
         this.props.setHost(true);
         this.props.setCaptain(false);
         this.props.setPage(Pages.GAME);
-        // Attach to socket here
     }
 
     render() {

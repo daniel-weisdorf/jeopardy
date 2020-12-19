@@ -78,10 +78,10 @@ class JoinPage extends React.Component {
             return;
         }
         this.props.setGameState(response.data);
+        this.props.connectSocket();
         this.setState({
             isBusy: false,
         });
-        // Attach to socket here - TODO
     }
 
     async createTeam(retries = 0) {
@@ -129,6 +129,7 @@ class JoinPage extends React.Component {
             return;
         }
         // Socket will update local state
+        this.props.socketSendGameUpdate();
         this.props.setCaptain(true);
         this.props.setHost(false);
         this.props.setPlayerUUID(response.data.id);
@@ -179,6 +180,7 @@ class JoinPage extends React.Component {
             return;
         }
         // Socket will update local state
+        this.props.socketSendGameUpdate();
         this.props.setCaptain(false);
         this.props.setHost(false);
         this.props.setPlayerUUID(response.data.id);

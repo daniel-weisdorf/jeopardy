@@ -23,7 +23,11 @@ class App extends React.Component {
         this.setHost = this.setHost.bind(this);
         this.setCaptain = this.setCaptain.bind(this);
         this.setPlayerUUID = this.setPlayerUUID.bind(this);
+        this.connectSocket = this.connectSocket.bind(this);
+        this.socketSendGameUpdate = this.socketSendGameUpdate.bind(this);
     }
+
+    socket = null;
 
     setHost(bool) {
         this.setState({ isHost: bool });
@@ -47,6 +51,27 @@ class App extends React.Component {
             playerUUID: uuid,
         });
         sessionStorage.setItem("uuid", uuid);
+    }
+    connectSocket() {
+        if (this.socket) {
+            this.socket.close();
+            this.socket = null;
+        }
+        this.socket = new WebSocket(
+            "ws://" +
+                "localhost:8000" +
+                "/ws/jeopardy/" +
+                sessionStorage.getItem("roomCode") +
+                "/"
+        );
+        this.socket.onopen = () => this.socketSendGameUpdate();
+        this.socket.addEventListener("message", (event) => {
+            const json = JSON.parse(event.data);
+            this.setGameState(json.data);
+        });
+    }
+    socketSendGameUpdate() {
+        this.socket.send("game_update");
     }
 
     componentDidMount() {
@@ -83,6 +108,8 @@ class App extends React.Component {
                         setGameState={this.setGameState}
                         setHost={this.setHost}
                         setCaptain={this.setCaptain}
+                        connectSocket={this.connectSocket}
+                        socketSendGameUpdate={this.socketSendGameUpdate}
                     />
                 )}
                 {this.state.currentPage === Pages.JOIN && (
@@ -93,6 +120,8 @@ class App extends React.Component {
                         setHost={this.setHost}
                         gameState={this.state.gameState}
                         setPlayerUUID={this.setPlayerUUID}
+                        connectSocket={this.connectSocket}
+                        socketSendGameUpdate={this.socketSendGameUpdate}
                     />
                 )}
                 {this.state.currentPage === Pages.GAME && (
@@ -102,6 +131,7 @@ class App extends React.Component {
                         gameState={this.state.gameState}
                         isHost={this.state.isHost}
                         isCaptain={this.state.isCaptain}
+                        socketSendGameUpdate={this.socketSendGameUpdate}
                     />
                 )}
             </div>

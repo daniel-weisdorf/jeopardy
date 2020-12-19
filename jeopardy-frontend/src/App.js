@@ -16,18 +16,22 @@ class App extends React.Component {
             gameState: Immutable.Map(),
             isHost: false,
             isCaptain: false,
+            playerUUID: null,
         };
         this.setPage = this.setPage.bind(this);
         this.setGameState = this.setGameState.bind(this);
         this.setHost = this.setHost.bind(this);
         this.setCaptain = this.setCaptain.bind(this);
+        this.setPlayerUUID = this.setPlayerUUID.bind(this);
     }
 
     setHost(bool) {
         this.setState({ isHost: bool });
+        sessionStorage.setItem("isHost", bool);
     }
     setCaptain(bool) {
         this.setState({ isCaptain: bool });
+        sessionStorage.setItem("isCaptain", bool);
     }
     setPage(page) {
         this.setState({ currentPage: page });
@@ -36,6 +40,22 @@ class App extends React.Component {
         this.setState({
             gameState: Immutable.fromJS(data),
         });
+        sessionStorage.setItem("roomCode", data.room_code);
+    }
+    setPlayerUUID(uuid) {
+        this.setState({
+            playerUUID: uuid,
+        });
+        sessionStorage.setItem("uuid", uuid);
+    }
+
+    componentDidMount() {
+        this.setState({
+            isHost: sessionStorage.getItem("isHost") || false,
+            isCaptain: sessionStorage.getItem("isCaptain") || false,
+            uuid: sessionStorage.getItem("uuid") || null,
+        });
+        // TODO - jump back into game?
     }
 
     render() {
@@ -62,13 +82,17 @@ class App extends React.Component {
                         setPage={this.setPage}
                         setGameState={this.setGameState}
                         setHost={this.setHost}
+                        setCaptain={this.setCaptain}
                     />
                 )}
                 {this.state.currentPage === Pages.JOIN && (
                     <JoinPage
                         setPage={this.setPage}
                         setGameState={this.setGameState}
+                        setCaptain={this.setCaptain}
+                        setHost={this.setHost}
                         gameState={this.state.gameState}
+                        setPlayerUUID={this.setPlayerUUID}
                     />
                 )}
                 {this.state.currentPage === Pages.GAME && (

@@ -25,9 +25,11 @@ export default class GridCategory extends React.Component {
                         height: GridSize,
                         width: GridSize,
                         backgroundColor: GridBackgroundColor,
+                        fontWeight: "bold",
+                        margin: 1,
                     }}
                 >
-                    {this.props.categoryName}
+                    {this.props.categoryName.toUpperCase()}
                 </Button>
                 {questions.map((o) => (
                     <GridQuestion

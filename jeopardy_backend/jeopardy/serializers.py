@@ -34,7 +34,7 @@ class PlayerSerializer(serializers.ModelSerializer):
         exclude = ['team']
 
 class TeamSerializer(serializers.ModelSerializer):
-    players = PlayerSerializer()
+    players = PlayerSerializer(many=True)
     class Meta:
         model = Team
         exclude = ['game']

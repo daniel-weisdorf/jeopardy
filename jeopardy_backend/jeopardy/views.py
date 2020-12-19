@@ -58,7 +58,7 @@ class TeamViewset(viewsets.ModelViewSet):
         player = Player.objects.create(team=team, name=team_json['captain_name'], is_captain=True)
 
         team.refresh_from_db()
-        return Response(TeamSerializer(team).data, status=status.HTTP_201_CREATED)
+        return Response(PlayerSerializer(player).data, status=status.HTTP_201_CREATED)
 
 class PlayerViewset(viewsets.ModelViewSet):
     serializer_class = PlayerSerializer
@@ -73,6 +73,6 @@ class PlayerViewset(viewsets.ModelViewSet):
         if team.game.is_complete:
             return Response('Game is already done', status=status.HTTP_400_BAD_REQUEST)
 
-        player = Player.objects.create(team=team, name=team_json['player_name'])
+        player = Player.objects.create(team=team, name=player_json['player_name'])
 
         return Response(PlayerSerializer(player).data, status=status.HTTP_201_CREATED)

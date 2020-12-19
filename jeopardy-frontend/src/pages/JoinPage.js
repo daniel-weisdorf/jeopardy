@@ -20,6 +20,8 @@ class JoinPage extends React.Component {
         this.handlePlayerNameChange = this.handlePlayerNameChange.bind(this);
         this.handleRoomCodeChange = this.handleRoomCodeChange.bind(this);
         this.handleTeamNameChange = this.handleTeamNameChange.bind(this);
+        this.joinTeam = this.joinTeam.bind(this);
+        this.createTeam = this.createTeam.bind(this);
     }
 
     // Form State Handlers
@@ -44,16 +46,12 @@ class JoinPage extends React.Component {
         this.setState({
             isBusy: true,
         });
+        let response = null;
         try {
-            const response = await axios.get(
+            response = await axios.get(
                 `/api/games/?roomCode=${this.state.roomCode.toUpperCase()}`
             );
-            console.log(response);
-            console.log(this.props.setGameState);
-            this.props.setGameState(response.data);
-            // Attach to socket here
         } catch (error) {
-            console.log(error);
             const res = error.response;
             if (res.status === 404) {
                 this.props.toastManager.add("Room Code not found", {
@@ -77,11 +75,119 @@ class JoinPage extends React.Component {
                     isBusy: false,
                 });
             }
+            return;
         }
+        this.props.setGameState(response.data);
+        this.setState({
+            isBusy: false,
+        });
+        // Attach to socket here - TODO
+    }
+
+    async createTeam(retries = 0) {
+        this.setState({
+            isBusy: true,
+        });
+        let response = null;
+        try {
+            response = await axios.post(`/api/teams/`, {
+                room_code: this.props.gameState.get("room_code"),
+                name: this.state.teamName,
+                captain_name: this.state.playerName,
+            });
+        } catch (error) {
+            const res = error.response;
+            if (res.status === 404) {
+                this.props.toastManager.add("Game not found", {
+                    appearance: "error",
+                });
+                this.setState({
+                    isBusy: false,
+                });
+            } else if (res.status === 400) {
+                this.props.toastManager.add("Game is complete", {
+                    appearance: "error",
+                });
+                this.setState({
+                    isBusy: false,
+                });
+            } else if (res.status === 500 && retries < 3) {
+                setTimeout(() => {
+                    this.createTeam(++retries);
+                }, 1000);
+            } else {
+                this.props.toastManager.add(
+                    "Hmm, something went wrong. Try again in a little bit!",
+                    {
+                        appearance: "error",
+                    }
+                );
+                this.setState({
+                    isBusy: false,
+                });
+            }
+            return;
+        }
+        // Socket will update local state
+        this.props.setCaptain(true);
+        this.props.setHost(false);
+        this.props.setPlayerUUID(response.data.id);
+        this.props.setPage(Pages.GAME);
+    }
+
+    async joinTeam(teamId, retries = 0) {
+        this.setState({
+            isBusy: true,
+        });
+        let response = null;
+        try {
+            response = await axios.post(`/api/players/`, {
+                team_id: teamId,
+                player_name: this.state.playerName,
+            });
+        } catch (error) {
+            const res = error.response;
+            if (res.status === 404) {
+                this.props.toastManager.add("Game not found", {
+                    appearance: "error",
+                });
+                this.setState({
+                    isBusy: false,
+                });
+            } else if (res.status === 400) {
+                this.props.toastManager.add("Game is complete", {
+                    appearance: "error",
+                });
+                this.setState({
+                    isBusy: false,
+                });
+            } else if (res.status === 500 && retries < 3) {
+                setTimeout(() => {
+                    this.joinTeam(++retries);
+                }, 1000);
+            } else {
+                this.props.toastManager.add(
+                    "Hmm, something went wrong. Try again in a little bit!",
+                    {
+                        appearance: "error",
+                    }
+                );
+                this.setState({
+                    isBusy: false,
+                });
+            }
+            return;
+        }
+        // Socket will update local state
+        this.props.setCaptain(false);
+        this.props.setHost(false);
+        this.props.setPlayerUUID(response.data.id);
+        this.props.setPage(Pages.GAME);
     }
 
     render() {
         const canGetGameInfo = this.state.roomCode.length === 10;
+        const canClick = !!this.state.playerName && !this.state.isBusy;
         return (
             <>
                 {!this.props.gameState.get("teams", false) ? (
@@ -124,7 +230,11 @@ class JoinPage extends React.Component {
                                 onClick={() => this.getGameInfo()}
                                 style={{ width: 115 }}
                             >
-                                Join Game
+                                {this.state.isBusy ? (
+                                    <Spinner animation="border" />
+                                ) : (
+                                    "Join Game"
+                                )}
                             </Button>
                         </div>
                     </Form>
@@ -154,13 +264,18 @@ class JoinPage extends React.Component {
                                     key={o.id}
                                     name={o.name}
                                     players={Immutable.fromJS(o.players)}
+                                    isBusy={this.state.isBusy}
+                                    canClick={canClick}
+                                    onClick={() => this.joinTeam(o.id)}
                                 />
                             ))}
                         <JoinTeam
                             name={this.state.teamName}
                             handleTeamNameChange={this.handleTeamNameChange}
                             create={true}
-                            createTeam={this.createTeam}
+                            isBusy={this.state.isBusy}
+                            canClick={canClick}
+                            onClick={() => this.createTeam()}
                         />
                     </Form>
                 )}

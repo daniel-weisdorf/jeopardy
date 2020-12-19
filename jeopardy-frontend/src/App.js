@@ -71,7 +71,7 @@ class App extends React.Component {
         });
     }
     socketSendGameUpdate() {
-        this.socket.send("game_update");
+        //this.socket.send('{"type":"game_update"}');
     }
 
     componentDidMount() {

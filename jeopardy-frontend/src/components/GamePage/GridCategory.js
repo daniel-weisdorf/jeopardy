@@ -27,6 +27,7 @@ export default class GridCategory extends React.Component {
                         backgroundColor: GridBackgroundColor,
                         fontWeight: "bold",
                         margin: 1,
+                        fontSize: 20,
                     }}
                 >
                     {this.props.categoryName.toUpperCase()}

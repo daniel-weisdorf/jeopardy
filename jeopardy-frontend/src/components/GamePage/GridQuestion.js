@@ -16,6 +16,8 @@ export default class GridQuestion extends React.Component {
                     height: GridSize,
                     width: GridSize,
                     backgroundColor: GridBackgroundColor,
+                    fontSize: 40,
+                    color: "yellow",
                     margin: 1,
                 }}
                 disabled={this.props.isAnswered || !this.props.canClick}

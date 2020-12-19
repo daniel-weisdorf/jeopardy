@@ -4,8 +4,23 @@ from rest_framework.response import Response
 from jeopardy.serializers import GameSerializer, TeamSerializer, PlayerSerializer, QuestionSerializer, CategorySerializer
 from jeopardy.models import Game, Host, Category, Question, Player, Team
 
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+
 import string, json
 from django.utils.crypto import get_random_string
+
+def send_game_update(room_code):
+    channel_layer = get_channel_layer()
+    game = Game.objects.get(room_code=room_code)
+    data = GameSerializer(game).data
+    async_to_sync(channel_layer.group_send)(
+        room_code,
+        {
+            'type': 'chat_message',
+            'data': data
+        }
+    )
 
 class GameViewset(viewsets.ModelViewSet):
     serializer_class = GameSerializer
@@ -58,6 +73,8 @@ class TeamViewset(viewsets.ModelViewSet):
         player = Player.objects.create(team=team, name=team_json['captain_name'], is_captain=True)
 
         team.refresh_from_db()
+        send_game_update(game.room_code)
+
         return Response(PlayerSerializer(player).data, status=status.HTTP_201_CREATED)
 
 class PlayerViewset(viewsets.ModelViewSet):
@@ -75,4 +92,5 @@ class PlayerViewset(viewsets.ModelViewSet):
 
         player = Player.objects.create(team=team, name=player_json['player_name'])
 
+        send_game_update(team.game.room_code)
         return Response(PlayerSerializer(player).data, status=status.HTTP_201_CREATED)

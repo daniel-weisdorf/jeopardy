@@ -1,7 +1,7 @@
 import json
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
-from jeopardy.models import Game
+from jeopardy.models import Game, Player
 from jeopardy.serializers import GameSerializer
 
 
@@ -23,17 +23,40 @@ class GameConsumer(WebsocketConsumer):
         )
 
     def receive(self, text_data):
+        data_json = json.loads(text_data)
+        message_type = data_json['type']
         # Send message to room group
-        if (text_data == 'game_update'):
-            game = Game.objects.get(room_code=self.room_name)
-            data = GameSerializer(game).data
-            async_to_sync(self.channel_layer.group_send)(
-                self.room_name,
-                {
-                    'type': 'chat_message',
-                    'data': data
-                }
-            )
+        if message_type == 'game_update':
+            self.send_game_update()
+            
+        elif message_type == 'buzz':
+            self.set_buzz(data_json)
+
+    def send_game_update(self):
+        game = Game.objects.get(room_code=self.room_name)
+        data = GameSerializer(game).data
+        async_to_sync(self.channel_layer.group_send)(
+            self.room_name,
+            {
+                'type': 'chat_message',
+                'data': data
+            }
+        )
+    
+    def set_buzz(data_json):
+        game = Game.objects.get(room_code=self.room_name)
+        if game.is_player_answering:
+            # Return failed to buzz
+            pass
+        elif game.is_complete:
+            pass
+            # Return error
+        else:
+            uuid = data_json['uuid']
+            player = Player.objects.get(id=uuid)
+            player.is_answering = True
+            player.save()
+        self.send_game_update()
 
     def chat_message(self, event):
         # Send message to WebSocket

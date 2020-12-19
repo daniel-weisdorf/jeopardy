@@ -13,6 +13,13 @@ class Game(models.Model):
 				return True
 		return False
 
+	def picking_team_id(self):
+		teams = self.teams.all()
+		for team in teams:
+			if team.is_picking:
+				return team.id
+		return 0
+
 	def __str__(self):
 		return self.room_code
 

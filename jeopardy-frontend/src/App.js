@@ -17,12 +17,14 @@ class App extends React.Component {
             isHost: false,
             isCaptain: false,
             playerUUID: null,
+            teamId: null,
         };
         this.setPage = this.setPage.bind(this);
         this.setGameState = this.setGameState.bind(this);
         this.setHost = this.setHost.bind(this);
         this.setCaptain = this.setCaptain.bind(this);
         this.setPlayerUUID = this.setPlayerUUID.bind(this);
+        this.setTeamId = this.setTeamId.bind(this);
         this.connectSocket = this.connectSocket.bind(this);
         this.socketSendGameUpdate = this.socketSendGameUpdate.bind(this);
     }
@@ -51,6 +53,12 @@ class App extends React.Component {
             playerUUID: uuid,
         });
         sessionStorage.setItem("uuid", uuid);
+    }
+    setTeamId(id) {
+        this.setState({
+            teamId: id,
+        });
+        sessionStorage.setItem("teamId", id);
     }
     connectSocket() {
         if (this.socket) {
@@ -120,6 +128,7 @@ class App extends React.Component {
                         setHost={this.setHost}
                         gameState={this.state.gameState}
                         setPlayerUUID={this.setPlayerUUID}
+                        setTeamId={this.setTeamId}
                         connectSocket={this.connectSocket}
                         socketSendGameUpdate={this.socketSendGameUpdate}
                     />
@@ -131,6 +140,7 @@ class App extends React.Component {
                         gameState={this.state.gameState}
                         isHost={this.state.isHost}
                         isCaptain={this.state.isCaptain}
+                        teamId={this.state.teamId}
                         socketSendGameUpdate={this.socketSendGameUpdate}
                     />
                 )}

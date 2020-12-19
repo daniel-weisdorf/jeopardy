@@ -133,6 +133,7 @@ class JoinPage extends React.Component {
         this.props.setCaptain(true);
         this.props.setHost(false);
         this.props.setPlayerUUID(response.data.id);
+        this.props.setTeamId(response.data.team);
         this.props.setPage(Pages.GAME);
     }
 
@@ -184,6 +185,7 @@ class JoinPage extends React.Component {
         this.props.setCaptain(false);
         this.props.setHost(false);
         this.props.setPlayerUUID(response.data.id);
+        this.props.setTeamId(response.data.team);
         this.props.setPage(Pages.GAME);
     }
 

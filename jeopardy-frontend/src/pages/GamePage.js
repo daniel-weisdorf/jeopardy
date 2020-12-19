@@ -13,7 +13,9 @@ export default class GamePage extends React.Component {
         this.state = {};
     }
     render() {
-        // Map Teams -> Players
+        const canClick =
+            this.props.isCaptain &&
+            this.props.gameState.get("picking_team_id", 0) == this.props.teamId;
         return (
             <div
                 style={{
@@ -22,6 +24,8 @@ export default class GamePage extends React.Component {
                     alignItems: "center",
                 }}
             >
+                Room Code: {this.props.gameState.get("room_code")}
+                <br />
                 <div
                     id="grid"
                     style={{
@@ -37,13 +41,15 @@ export default class GamePage extends React.Component {
                                 key={o.id}
                                 questions={Immutable.fromJS(o.questions)}
                                 categoryName={o.name}
-                                canClick={this.props.isCaptain}
+                                canClick={canClick}
                             />
                         ))}
                 </div>
                 <br />
                 <br />
-                <TeamGrid teams={this.props.gameState.get("teams")} />
+                {this.props.gameState.get("teams").toJS().length > 0 && (
+                    <TeamGrid teams={this.props.gameState.get("teams")} />
+                )}
             </div>
         );
     }

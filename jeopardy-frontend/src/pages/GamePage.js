@@ -5,6 +5,7 @@ import axios from "axios";
 import { Pages } from "../globals/Enums";
 import GridCategory from "../components/GamePage/GridCategory";
 import Immutable from "immutable";
+import TeamGrid from "../components/GamePage/TeamGrid";
 
 export default class GamePage extends React.Component {
     constructor(props) {
@@ -12,28 +13,37 @@ export default class GamePage extends React.Component {
         this.state = {};
     }
     render() {
-        // Map Categories
-        // Map Questions
         // Map Teams -> Players
         return (
             <div
-                id="grid"
                 style={{
                     display: "flex",
-                    flexDirection: "row",
+                    flexDirection: "column",
+                    alignItems: "center",
                 }}
             >
-                {this.props.gameState
-                    .get("categories")
-                    .toJS()
-                    .map((o) => (
-                        <GridCategory
-                            key={o.id}
-                            questions={Immutable.fromJS(o.questions)}
-                            categoryName={o.name}
-                            canClick={this.props.isCaptain}
-                        />
-                    ))}
+                <div
+                    id="grid"
+                    style={{
+                        display: "flex",
+                        flexDirection: "row",
+                    }}
+                >
+                    {this.props.gameState
+                        .get("categories")
+                        .toJS()
+                        .map((o) => (
+                            <GridCategory
+                                key={o.id}
+                                questions={Immutable.fromJS(o.questions)}
+                                categoryName={o.name}
+                                canClick={this.props.isCaptain}
+                            />
+                        ))}
+                </div>
+                <br />
+                <br />
+                <TeamGrid teams={this.props.gameState.get("teams")} />
             </div>
         );
     }

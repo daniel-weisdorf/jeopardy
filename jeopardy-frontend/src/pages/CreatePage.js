@@ -65,12 +65,9 @@ class CreatePage extends React.Component {
             host_name: this.state.name,
             categories: this.state.json["categories"],
         };
+        let response = null;
         try {
-            const response = await axios.post("/api/games/", data);
-            this.props.setGameState(response.data);
-            this.props.setHost(true);
-            this.props.setPage(Pages.GAME);
-            // Attach to socket here
+            response = await axios.post("/api/games/", data);
         } catch (error) {
             const res = error.response;
             if (res.status === 500 && retries < 3) {
@@ -88,7 +85,13 @@ class CreatePage extends React.Component {
                     isBusy: false,
                 });
             }
+            return;
         }
+        this.props.setGameState(response.data);
+        this.props.setHost(true);
+        this.props.setCaptain(false);
+        this.props.setPage(Pages.GAME);
+        // Attach to socket here
     }
 
     render() {

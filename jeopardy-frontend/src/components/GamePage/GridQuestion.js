@@ -1,7 +1,8 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
 import {
-    GridSize,
+    GridHeight,
+    GridWidth,
     GridBorder,
     GridBackgroundColor,
 } from "../../globals/StyleConstants";
@@ -26,8 +27,8 @@ export default class GridQuestion extends React.Component {
             <Button
                 style={{
                     border: GridBorder,
-                    height: GridSize,
-                    width: GridSize,
+                    height: GridHeight,
+                    width: GridWidth,
                     backgroundColor: GridBackgroundColor,
                     fontSize: 40,
                     color: "yellow",

@@ -2,7 +2,8 @@ import React from "react";
 import Button from "react-bootstrap/Button";
 import GridQuestion from "./GridQuestion";
 import {
-    GridSize,
+    GridHeight,
+    GridWidth,
     GridBorder,
     GridBackgroundColor,
 } from "../../globals/StyleConstants";
@@ -23,8 +24,8 @@ export default class GridCategory extends React.Component {
                     disabled={true}
                     style={{
                         border: GridBorder,
-                        height: GridSize,
-                        width: GridSize,
+                        height: GridHeight,
+                        width: GridWidth,
                         backgroundColor: GridBackgroundColor,
                         fontWeight: "bold",
                         margin: 1,

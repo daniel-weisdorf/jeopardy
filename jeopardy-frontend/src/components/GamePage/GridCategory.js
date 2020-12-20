@@ -39,7 +39,7 @@ export default class GridCategory extends React.Component {
                         key={o.id}
                         id={o.id}
                         teamId={this.props.teamId}
-                        isAnswered={o.isAnswered}
+                        isAnswered={o.is_answered}
                         value={o.value}
                         canClick={this.props.canClick}
                         socket={this.props.socket}

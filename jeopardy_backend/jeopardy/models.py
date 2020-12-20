@@ -7,11 +7,12 @@ class Game(models.Model):
 	is_complete = models.BooleanField(default=False)
 	show_full_question = models.BooleanField(default=False)
 
-	def is_player_answering(self):
+	def player_answering(self):
 		teams = self.teams.all()
 		for team in teams:
-			if len(team.players.all().filter(is_answering=True)):
-				return True
+			query = team.players.all().filter(is_answering=True)
+			if len(query):
+				return query[0]
 		return False
 
 	def picking_team_id(self):

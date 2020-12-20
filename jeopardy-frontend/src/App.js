@@ -65,8 +65,10 @@ class App extends React.Component {
             this.socket.close();
             this.socket = null;
         }
+        const ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
         this.socket = new WebSocket(
-            "ws://" +
+            ws_scheme +
+                "://" +
                 window.location.hostname +
                 (window.location.hostname === "localhost" ? ":8000" : "") +
                 "/ws/jeopardy/" +

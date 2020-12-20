@@ -67,7 +67,8 @@ class App extends React.Component {
         }
         this.socket = new WebSocket(
             "ws://" +
-                "localhost:8000" +
+                window.location.hostname +
+                (window.location.hostname === "localhost" ? ":8000" : "") +
                 "/ws/jeopardy/" +
                 sessionStorage.getItem("roomCode") +
                 "/"

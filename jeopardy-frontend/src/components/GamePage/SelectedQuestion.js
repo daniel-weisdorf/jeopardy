@@ -20,13 +20,47 @@ export default class SelectedQuestion extends React.Component {
                     display: "flex",
                     alignItems: "center",
                     flexDirection: "column",
+                    justifyContent: "space-between",
+                    width: "100%",
                 }}
             >
-                <div>
-                    {!this.props.gameState.get("show_full_question", false) ? (
-                        <div>Category - Value</div>
-                    ) : (
-                        <div>Question Text</div>
+                <div
+                    style={{
+                        border: "1px solid gray",
+                        borderRadius: 10,
+                        backgroundColor: "lightblue",
+                        padding: 20,
+                        width: "30%",
+                    }}
+                >
+                    <div
+                        style={{
+                            fontSize: 30,
+                            textAlign: "center",
+                        }}
+                    >
+                        {this.props.gameState.getIn(
+                            ["selected_question", "category_name"],
+                            "error"
+                        )}
+                        {" - "}
+                        {this.props.gameState.getIn(
+                            ["selected_question", "value"],
+                            "error"
+                        )}
+                    </div>
+                    <br />
+                    {this.props.gameState.get("show_full_question", false) && (
+                        <div
+                            style={{
+                                fontSize: 30,
+                            }}
+                        >
+                            {this.props.gameState.getIn([
+                                "selected_question",
+                                "question",
+                            ])}
+                        </div>
                     )}
                 </div>
 
@@ -40,10 +74,12 @@ export default class SelectedQuestion extends React.Component {
                                 )
                             }
                             onClick={this.buzz}
-                            style={{
-                                position: "absolute",
-                                bottom: 0,
-                            }}
+                            style={
+                                {
+                                    // position: "absolute",
+                                    // bottom: 0,
+                                }
+                            }
                         >
                             Buzz
                         </Button>

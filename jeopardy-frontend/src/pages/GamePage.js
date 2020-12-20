@@ -18,6 +18,7 @@ export default class GamePage extends React.Component {
                     flexDirection: "column",
                     alignItems: "center",
                     position: "relative",
+                    width: "100%",
                 }}
             >
                 <div

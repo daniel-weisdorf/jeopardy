@@ -2,6 +2,10 @@ from rest_framework import serializers
 from jeopardy.models import Game, Team, Player, Category, Question, Host
 
 class QuestionSerializer(serializers.ModelSerializer):
+	category_name = serializers.SerializerMethodField()
+
+	def get_category_name(self, obj):
+		return obj.category.name
 	class Meta:
 		model = Question
 		exclude = [
@@ -13,6 +17,11 @@ class QuestionSerializer(serializers.ModelSerializer):
 		]
 
 class QuestionDetailSerializer(serializers.ModelSerializer):
+	category_name = serializers.SerializerMethodField()
+
+	def get_category_name(self, obj):
+		return obj.category.name
+
 	class Meta:
 		model = Question
 		exclude = ['category', 'answer']

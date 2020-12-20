@@ -49,7 +49,10 @@ class GameSerializer(serializers.ModelSerializer):
 
 	def get_selected_question(self, obj):
 		if obj.selected_question():
-			return QuestionSerializer(obj.selected_question()).data
+			if obj.show_full_question:
+				return QuestionDetailSerializer(obj.selected_question()).data
+			else:
+				return QuestionSerializer(obj.selected_question()).data
 		return None
 
 	class Meta:

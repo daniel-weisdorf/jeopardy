@@ -106,7 +106,7 @@ class CreatePage extends React.Component {
                 }}
             >
                 <Form.Group controlId="name">
-                    <Form.Label>Player Name</Form.Label>
+                    <Form.Label>Host Name</Form.Label>
                     <Form.Control
                         autoComplete="off"
                         type="text"

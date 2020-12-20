@@ -63,27 +63,30 @@ export default class SelectedQuestion extends React.Component {
                         </div>
                     )}
                 </div>
-
-                {!this.props.isHost &&
-                    this.props.gameState.get("show_full_question", false) && (
-                        <Button
-                            disabled={
-                                !!this.props.gameState.get(
-                                    "player_answering",
-                                    null
-                                )
+                <br />
+                {!this.props.isHost && (
+                    <Button
+                        disabled={
+                            !!this.props.gameState.get(
+                                "player_answering",
+                                null ||
+                                    !this.props.gameState.get(
+                                        "show_full_question",
+                                        false
+                                    )
+                            )
+                        }
+                        onClick={this.buzz}
+                        style={
+                            {
+                                // position: "absolute",
+                                // bottom: 0,
                             }
-                            onClick={this.buzz}
-                            style={
-                                {
-                                    // position: "absolute",
-                                    // bottom: 0,
-                                }
-                            }
-                        >
-                            Buzz
-                        </Button>
-                    )}
+                        }
+                    >
+                        Buzz
+                    </Button>
+                )}
             </div>
         );
     }

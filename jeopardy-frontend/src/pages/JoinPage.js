@@ -201,6 +201,7 @@ class JoinPage extends React.Component {
                             borderRadius: 10,
                             padding: 20,
                             width: "30%",
+                            minWidth: 400,
                         }}
                     >
                         <Form.Group controlId="roomCode">
@@ -249,6 +250,7 @@ class JoinPage extends React.Component {
                             borderRadius: 10,
                             padding: 20,
                             width: "30%",
+                            minWidth: 400,
                         }}
                     >
                         <Form.Group controlId="playerName">

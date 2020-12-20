@@ -5,6 +5,7 @@ import uuid
 class Game(models.Model):
 	room_code = models.CharField(max_length=10, unique=True)
 	is_complete = models.BooleanField(default=False)
+	show_full_question = models.BooleanField(default=False)
 
 	def is_player_answering(self):
 		teams = self.teams.all()

@@ -94,9 +94,3 @@ class PlayerViewset(viewsets.ModelViewSet):
 
         send_game_update(team.game.room_code)
         return Response(PlayerSerializer(player).data, status=status.HTTP_201_CREATED)
-
-class QuestionViewSet(viewsets.ModelViewSet):
-    http_method_names = ['patch']
-
-    def create(self, request):
-        pass

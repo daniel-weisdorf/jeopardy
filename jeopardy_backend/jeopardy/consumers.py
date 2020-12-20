@@ -1,7 +1,7 @@
 import json
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
-from jeopardy.models import Game, Player
+from jeopardy.models import Game, Player, Question, Team
 from jeopardy.serializers import GameSerializer
 import random
 
@@ -26,26 +26,15 @@ class GameConsumer(WebsocketConsumer):
         data_json = json.loads(text_data)
         message_type = data_json['type']
         # Send message to room group
-        if message_type == 'game_update':
-            self.send_game_update()
-
-        elif message_type == 'buzz':
+        if message_type == 'buzz':
             self.set_buzz(data_json)
-
         elif message_type == 'start_game':
             self.start_game()
+        elif message_type == 'select_question':
+            self.select_question(data_json)
+        elif message_type == 'game_update':
+            self.send_game_update()
 
-    def send_game_update(self):
-        game = Game.objects.get(room_code=self.room_name)
-        data = GameSerializer(game).data
-        async_to_sync(self.channel_layer.group_send)(
-            self.room_name,
-            {
-                'type': 'chat_message',
-                'data': data
-            }
-        )
-    
     def set_buzz(self, data_json):
         game = Game.objects.get(room_code=self.room_name)
         if game.is_player_answering:
@@ -75,6 +64,31 @@ class GameConsumer(WebsocketConsumer):
 
         self.send_game_update()
 
+    def select_question(self, data_json):
+        question = Question.objects.get(id=data_json['question_id'])
+        team = Team.objects.get(id=data_json['team_id'])
+
+        if question.category.game.is_complete or not team.is_picking:
+            # something wrong
+            pass
+
+        question.is_selected = True
+        question.save()
+        team.is_picking = False
+        team.save()
+
+        self.send_game_update()
+
+    def send_game_update(self):
+        game = Game.objects.get(room_code=self.room_name)
+        data = GameSerializer(game).data
+        async_to_sync(self.channel_layer.group_send)(
+            self.room_name,
+            {
+                'type': 'chat_message',
+                'data': data
+            }
+        )
 
     def chat_message(self, event):
         # Send message to WebSocket

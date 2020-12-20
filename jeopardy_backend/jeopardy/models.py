@@ -19,6 +19,14 @@ class Game(models.Model):
 			if team.is_picking:
 				return team.id
 		return 0
+	
+	def selected_question(self):
+		categories = self.categories.all()
+		for category in categories:
+			query = category.questions.all().filter(is_selected=True)
+			if len(query):
+				return query[0]
+		return None
 
 	def __str__(self):
 		return self.room_code
@@ -60,7 +68,6 @@ class Question(models.Model):
 	value = models.IntegerField()
 	is_answered = models.BooleanField(default=False)
 	is_selected = models.BooleanField(default=False)
-	is_buzzed_on = models.BooleanField(default=False)
 	is_daily_double = models.BooleanField(default=False)
 	is_picture_question = models.BooleanField(default=False)
 

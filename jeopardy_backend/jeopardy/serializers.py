@@ -45,6 +45,12 @@ class GameSerializer(serializers.ModelSerializer):
 	host = HostSerializer()
 	is_player_answering = serializers.BooleanField()
 	picking_team_id = serializers.IntegerField()
+	selected_question = serializers.SerializerMethodField()
+
+	def get_selected_question(self, obj):
+		if obj.selected_question():
+			return QuestionSerializer(obj.selected_question()).data
+		return None
 
 	class Meta:
 		model = Game

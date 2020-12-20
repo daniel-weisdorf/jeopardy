@@ -1,8 +1,5 @@
 import React from "react";
-import { withToastManager } from "react-toast-notifications";
 import Button from "react-bootstrap/Button";
-import axios from "axios";
-import { Pages } from "../globals/Enums";
 import GridCategory from "../components/GamePage/GridCategory";
 import Immutable from "immutable";
 import TeamGrid from "../components/GamePage/TeamGrid";
@@ -22,7 +19,8 @@ export default class GamePage extends React.Component {
     render() {
         const canClick =
             this.props.isCaptain &&
-            this.props.gameState.get("picking_team_id", 0) == this.props.teamId;
+            this.props.gameState.get("picking_team_id", 0) ===
+                this.props.teamId;
         return (
             <div
                 style={{
@@ -32,7 +30,9 @@ export default class GamePage extends React.Component {
                 }}
             >
                 {this.props.isHost &&
-                    this.props.gameState.get("picking_team_id", 0) == 0 && (
+                    this.props.gameState.get("picking_team_id", 0) === 0 &&
+                    !this.props.gameState.get("selected_question", null) &&
+                    this.props.gameState.get("teams").length > 0 && (
                         <Button onClick={this.startGame}>Start Game</Button>
                     )}
                 <br />
@@ -55,6 +55,8 @@ export default class GamePage extends React.Component {
                                 questions={Immutable.fromJS(o.questions)}
                                 categoryName={o.name}
                                 canClick={canClick}
+                                socket={this.props.socket}
+                                teamId={this.props.teamId}
                             />
                         ))}
                 </div>

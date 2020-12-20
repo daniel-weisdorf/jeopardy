@@ -18,6 +18,7 @@ export default class GridCategory extends React.Component {
                     flexDirection: "column",
                 }}
             >
+                {/* NOT A BUTTON JUST FOR STYLE, SUE ME*/}
                 <Button
                     disabled={true}
                     style={{
@@ -35,9 +36,12 @@ export default class GridCategory extends React.Component {
                 {questions.map((o) => (
                     <GridQuestion
                         key={o.id}
+                        id={o.id}
+                        teamId={this.props.teamId}
                         isAnswered={o.isAnswered}
                         value={o.value}
                         canClick={this.props.canClick}
+                        socket={this.props.socket}
                     />
                 ))}
             </div>

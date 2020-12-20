@@ -8,6 +8,19 @@ import {
 
 // For usage in Grid, not Zoomed in
 export default class GridQuestion extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {};
+        this.selectQuestion = this.selectQuestion.bind(this);
+    }
+    // Actions
+
+    async selectQuestion() {
+        this.props.socket.send(
+            `{"type":"select_question", "question_id": ${this.props.id}, "team_id": ${this.props.teamId}}`
+        );
+    }
+
     render() {
         return (
             <Button
@@ -21,6 +34,7 @@ export default class GridQuestion extends React.Component {
                     margin: 1,
                 }}
                 disabled={this.props.isAnswered || !this.props.canClick}
+                onClick={this.selectQuestion}
             >
                 {this.props.isAnswered ? "" : "$" + this.props.value}
             </Button>

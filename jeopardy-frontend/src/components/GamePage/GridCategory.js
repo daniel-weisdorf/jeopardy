@@ -21,7 +21,7 @@ export default class GridCategory extends React.Component {
             >
                 {/* NOT A BUTTON JUST FOR STYLE, SUE ME*/}
                 <Button
-                    disabled={true}
+                    disabled={false}
                     style={{
                         border: GridBorder,
                         height: GridHeight,
@@ -30,6 +30,7 @@ export default class GridCategory extends React.Component {
                         fontWeight: "bold",
                         margin: 1,
                         fontSize: 20,
+                        cursor: "default",
                     }}
                 >
                     {this.props.categoryName.toUpperCase()}

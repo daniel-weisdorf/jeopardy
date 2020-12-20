@@ -3,7 +3,7 @@ from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 from jeopardy.models import Game, Player
 from jeopardy.serializers import GameSerializer
-
+import random
 
 class GameConsumer(WebsocketConsumer):
     def connect(self):
@@ -28,9 +28,12 @@ class GameConsumer(WebsocketConsumer):
         # Send message to room group
         if message_type == 'game_update':
             self.send_game_update()
-            
+
         elif message_type == 'buzz':
             self.set_buzz(data_json)
+
+        elif message_type == 'start_game':
+            self.start_game()
 
     def send_game_update(self):
         game = Game.objects.get(room_code=self.room_name)
@@ -43,7 +46,7 @@ class GameConsumer(WebsocketConsumer):
             }
         )
     
-    def set_buzz(data_json):
+    def set_buzz(self, data_json):
         game = Game.objects.get(room_code=self.room_name)
         if game.is_player_answering:
             # Return failed to buzz
@@ -57,6 +60,21 @@ class GameConsumer(WebsocketConsumer):
             player.is_answering = True
             player.save()
         self.send_game_update()
+
+    def start_game(self):
+        game = Game.objects.get(room_code=self.room_name)
+        if game.is_complete or game.picking_team_id != 0:
+            # something wrong
+            pass
+        
+        team_count = len(game.teams.all())
+        starting_team = random.randrange(0, team_count)
+        team = game.teams.all()[starting_team]
+        team.is_picking = True
+        team.save()
+
+        self.send_game_update()
+
 
     def chat_message(self, event):
         # Send message to WebSocket

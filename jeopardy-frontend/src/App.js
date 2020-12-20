@@ -141,6 +141,7 @@ class App extends React.Component {
                         isHost={this.state.isHost}
                         isCaptain={this.state.isCaptain}
                         teamId={this.state.teamId}
+                        socket={this.socket}
                         socketSendGameUpdate={this.socketSendGameUpdate}
                     />
                 )}

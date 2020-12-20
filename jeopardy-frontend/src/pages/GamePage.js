@@ -11,7 +11,14 @@ export default class GamePage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {};
+        this.startGame = this.startGame.bind(this);
     }
+
+    // Actions
+    async startGame() {
+        this.props.socket.send('{"type":"start_game"}');
+    }
+
     render() {
         const canClick =
             this.props.isCaptain &&
@@ -24,7 +31,13 @@ export default class GamePage extends React.Component {
                     alignItems: "center",
                 }}
             >
+                {this.props.isHost &&
+                    this.props.gameState.get("picking_team_id", 0) == 0 && (
+                        <Button onClick={this.startGame}>Start Game</Button>
+                    )}
+                <br />
                 Room Code: {this.props.gameState.get("room_code")}
+                <br />
                 <br />
                 <div
                     id="grid"
@@ -48,7 +61,10 @@ export default class GamePage extends React.Component {
                 <br />
                 <br />
                 {this.props.gameState.get("teams").toJS().length > 0 && (
-                    <TeamGrid teams={this.props.gameState.get("teams")} />
+                    <TeamGrid
+                        teams={this.props.gameState.get("teams")}
+                        isHost={this.props.isHost}
+                    />
                 )}
             </div>
         );

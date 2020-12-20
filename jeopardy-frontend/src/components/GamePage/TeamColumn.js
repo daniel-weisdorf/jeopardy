@@ -22,9 +22,12 @@ export default class TeamColumn extends React.Component {
                         fontSize: 20,
                         borderTop: TeamGridBorder,
                         padding: 10,
+                        textAlign: "center",
                     }}
                 >
                     {this.props.team.get("name")}
+                    <br />
+                    {this.props.team.get("score")}
                 </div>
                 {this.props.team
                     .get("players")

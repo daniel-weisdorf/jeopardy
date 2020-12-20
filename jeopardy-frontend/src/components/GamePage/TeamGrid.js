@@ -18,7 +18,11 @@ export default class TeamGrid extends React.Component {
                 }}
             >
                 {this.props.teams.toJS().map((o) => (
-                    <TeamColumn key={o.id} team={Immutable.fromJS(o)} />
+                    <TeamColumn
+                        key={o.id}
+                        team={Immutable.fromJS(o)}
+                        isHost={this.props.isHost}
+                    />
                 ))}
             </div>
         );

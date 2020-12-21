@@ -48,20 +48,35 @@ export default class SelectedQuestion extends React.Component {
                             ["selected_question", "value"],
                             "error"
                         )}
+                        <hr />
                     </div>
                     <br />
-                    {this.props.gameState.get("show_full_question", false) && (
-                        <div
-                            style={{
-                                fontSize: 30,
-                            }}
-                        >
-                            {this.props.gameState.getIn([
-                                "selected_question",
-                                "question",
-                            ])}
-                        </div>
-                    )}
+                    {this.props.gameState.get("show_full_question", false) &&
+                        (!this.props.gameState.getIn(
+                            ["selected_question", "is_picture_question"],
+                            false
+                        ) ? (
+                            <div
+                                style={{
+                                    fontSize: 30,
+                                }}
+                            >
+                                {this.props.gameState.getIn([
+                                    "selected_question",
+                                    "question",
+                                ])}
+                            </div>
+                        ) : (
+                            <div style={{ textAlign: "center" }}>
+                                <img
+                                    style={{}}
+                                    src={this.props.gameState.getIn([
+                                        "selected_question",
+                                        "question",
+                                    ])}
+                                />
+                            </div>
+                        ))}
                 </div>
                 <br />
                 {!this.props.isHost && (
@@ -69,11 +84,11 @@ export default class SelectedQuestion extends React.Component {
                         disabled={
                             !!this.props.gameState.get(
                                 "player_answering",
-                                null ||
-                                    !this.props.gameState.get(
-                                        "show_full_question",
-                                        false
-                                    )
+                                null
+                            ) ||
+                            !this.props.gameState.get(
+                                "show_full_question",
+                                false
                             )
                         }
                         onClick={this.buzz}

@@ -27,7 +27,12 @@ export default class JoinTeam extends React.Component {
                         />
                     </Form.Group>
                 ) : (
-                    this.props.name
+                    this.props.name +
+                    " (" +
+                    this.props.players.toJS().length +
+                    (this.props.players.toJS().length == 1
+                        ? " player)"
+                        : " players)")
                 )}
 
                 <Button

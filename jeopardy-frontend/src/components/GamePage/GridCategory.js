@@ -44,6 +44,8 @@ export default class GridCategory extends React.Component {
                         value={o.value}
                         canClick={this.props.canClick}
                         socket={this.props.socket}
+                        isHost={this.props.isHost}
+                        pickingTeamId={this.props.pickingTeamId}
                     />
                 ))}
             </div>

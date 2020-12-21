@@ -17,8 +17,11 @@ export default class GridQuestion extends React.Component {
     // Actions
 
     async selectQuestion() {
+        const teamId = this.props.isHost
+            ? this.props.pickingTeamId
+            : this.props.teamId;
         this.props.socket.send(
-            `{"type":"select_question", "question_id": ${this.props.id}, "team_id": ${this.props.teamId}}`
+            `{"type":"select_question", "question_id": ${this.props.id}, "team_id": ${teamId}}`
         );
     }
 

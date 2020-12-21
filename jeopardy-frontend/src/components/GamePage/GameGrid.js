@@ -5,9 +5,11 @@ import Immutable from "immutable";
 export default class GameGrid extends React.Component {
     render() {
         const canClick =
-            this.props.isCaptain &&
-            this.props.gameState.get("picking_team_id", 0) ===
-                this.props.teamId;
+            (this.props.isCaptain &&
+                this.props.gameState.get("picking_team_id", 0) ===
+                    this.props.teamId) ||
+            (this.props.isHost &&
+                this.props.gameState.get("picking_team_id", 0) !== 0);
         return (
             <div
                 id="grid"
@@ -27,6 +29,11 @@ export default class GameGrid extends React.Component {
                             canClick={canClick}
                             socket={this.props.socket}
                             teamId={this.props.teamId}
+                            pickingTeamId={this.props.gameState.get(
+                                "picking_team_id",
+                                0
+                            )}
+                            isHost={this.props.isHost}
                         />
                     ))}
             </div>

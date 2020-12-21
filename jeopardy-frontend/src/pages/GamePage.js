@@ -46,6 +46,7 @@ export default class GamePage extends React.Component {
                 {!this.props.gameState.get("selected_question", null) ? (
                     <GameGrid
                         isCaptain={this.props.isCaptain}
+                        isHost={this.props.isHost}
                         gameState={this.props.gameState}
                         socket={this.props.socket}
                         teamId={this.props.teamId}

@@ -1,5 +1,5 @@
 export const GridHeight = 80;
-export const GridWidth = 150;
+export const GridWidth = 200;
 export const GridBorder = "5px solid black";
 export const GridBackgroundColor = "blue";
 

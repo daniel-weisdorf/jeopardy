@@ -69,7 +69,9 @@ export default class SelectedQuestion extends React.Component {
                         ) : (
                             <div style={{ textAlign: "center" }}>
                                 <img
-                                    style={{}}
+                                    style={{
+                                        maxHeight: 400,
+                                    }}
                                     src={this.props.gameState.getIn([
                                         "selected_question",
                                         "question",
